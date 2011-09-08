@@ -48,10 +48,10 @@ Executable husky
   Main-is: husky.hs
   
   -- Packages needed in order to build this package.
-  Build-depends: http-types, wai, case-insensitive, enumerator, bytestring, transformers, filepath, network, warp, random, directory, base
+  Build-depends: http-types, wai, case-insensitive, enumerator, bytestring, transformers, filepath, network, warp, random, directory, base, network-info
   
   -- Modules not exported by this package.
-  -- Other-modules:       
+  Other-modules: Husky.Network
   
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   -- Build-tools:         

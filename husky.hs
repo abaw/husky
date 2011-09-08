@@ -4,10 +4,13 @@ import System.Directory
 import System.FilePath
 import System.Random (newStdGen, randomRs)
 
+import Control.Monad (liftM)
+
 import Network.Wai.Handler.Warp
 import Network.Socket
 
 import Husky.Wai.FileApplication
+import Husky.Network
 
 main =  getArgs >>= parseArgs
 
@@ -44,8 +47,12 @@ mayHostFile file True =  do
   let urlPath = leadingPath ++ "/" ++ (takeFileName file)
   s <- anyTCPSocketBound
   port <- (socketPort s)
-  putStrLn $ "http://localhost:" ++ (show port) ++ "/" ++ urlPath
+  urls <- map (formURL port urlPath) `liftM` allHostAddrs
+  putStrLn $ "host file \"" ++ file ++ "\" on these URLs:"
+  mapM_ putStrLn urls
   runSettingsSocket defaultSettings s $ fileApplication urlPath file
+  where
+    formURL port path host = "http://" ++ host ++ ":" ++ (show port) ++ "/" ++ path
 mayHostFile file False = putStrLn (file ++ " does not exists.")
 
 
