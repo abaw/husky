@@ -26,11 +26,10 @@ parseArgs _ = usage >> exitFailure
 randomString :: Int -> IO String
 randomString len = do
   gen <- newStdGen
-  return $ map (elemAt validChars) $ take len $ randomChars gen
+  return $ map (validChars !!) $ take len $ randomChars gen
   where
     randomChars gen = randomRs (0, (length validChars)-1) gen
     validChars = ['a'..'z'] ++ ['A'..'Z'] ++ ['_','-','~','/']
-    elemAt list idx = head $ snd $ splitAt idx list
 
 -- | return a tcp socket bound on any port
 anyTCPSocketBound :: IO Socket
