@@ -45,13 +45,13 @@ Cabal-version:       >=1.2
 
 Executable husky
   -- .hs or .lhs file containing the Main module.
-  Main-is: husky.hs
+  Main-is: Main.hs
   
   -- Packages needed in order to build this package.
   Build-depends: http-types, wai, case-insensitive, enumerator, bytestring, transformers, filepath, network, warp, random, directory, base == 4.*, network-info
   
   -- Modules not exported by this package.
-  Other-modules: Husky.Network
+  -- Other-modules: Husky.Network
   
   -- Extra tools (e.g. alex, hsc2hs, ...) needed to build the source.
   -- Build-tools:         

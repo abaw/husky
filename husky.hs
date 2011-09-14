@@ -1,5 +1,10 @@
-import System.Environment
-import System.Exit
+module Husky
+       (
+         runHusky
+       , pathConfig
+       )
+       where
+
 import System.Directory
 import System.FilePath
 import System.Random (newStdGen, randomRs)
@@ -12,15 +17,11 @@ import Network.Socket
 import Husky.Wai.FileApplication
 import Husky.Network
 
-main =  getArgs >>= parseArgs
 
-usage :: IO ()
-usage = getProgName >>= \prog ->
-  putStrLn ("Usage:" ++ prog ++ " <file>")
-
-parseArgs :: [String] -> IO ()
-parseArgs [file] = doesFileExist file >>= mayHostFile file
-parseArgs _ = usage >> exitFailure
+data Config = Config
+              { path :: FilePath
+              , debug :: Bool
+              }
 
 -- | return a random string with the given length
 randomString :: Int -> IO String
@@ -54,4 +55,13 @@ mayHostFile file True =  do
     formURL port path host = "http://" ++ host ++ ":" ++ (show port) ++ "/" ++ path
 mayHostFile file False = putStrLn (file ++ " does not exists.")
 
+runHusky :: Config -> IO ()
+runHusky conf = doesFileExist file >>= mayHostFile file
+                where
+                  file = path conf
 
+pathConfig :: FilePath -> Config
+pathConfig path = defaultConfig { path = path }
+
+defaultConfig :: Config
+defaultConfig = Config { path = "", debug = False }
